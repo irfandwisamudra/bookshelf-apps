@@ -16,7 +16,7 @@ function carousel() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const formInput = document.getElementById("inputBook");
+  const formInput = document.getElementById("bookForm");
   const formSearch = document.getElementById("searchBook");
   const formEditBook = document.getElementById("formEditBook");
 
@@ -24,10 +24,10 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     addBook();
 
-    document.getElementById("inputBookTitle").value = "";
-    document.getElementById("inputBookAuthor").value = "";
-    document.getElementById("inputBookYear").value = "";
-    document.getElementById("inputBookIsComplete").checked = false;
+    document.getElementById("bookFormTitle").value = "";
+    document.getElementById("bookFormAuthor").value = "";
+    document.getElementById("bookFormYear").value = "";
+    document.getElementById("bookFormIsComplete").checked = false;
   });
 
   formSearch.addEventListener("submit", function (event) {

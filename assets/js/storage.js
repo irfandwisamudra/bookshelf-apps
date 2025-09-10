@@ -38,7 +38,9 @@ function composeBookObject(id, title, author, year, isComplete) {
 }
 
 function renderFromBooks() {
-  for (book of books) {
+  document.getElementById(COMPLETE_BOOK).innerHTML = "";
+  document.getElementById(INCOMPLETE_BOOK).innerHTML = "";
+  for (const book of books) {
     const newBook = createBook(
       book.id,
       book.title,
@@ -65,8 +67,8 @@ function deleteBookFromJson(idBook) {
 }
 
 function findBook(idBook) {
-  for (book of books) {
-    if (book.id === idBook) return book;
+  for (const book of books) {
+    if (book.id == idBook) return book;
   }
   return null;
 }

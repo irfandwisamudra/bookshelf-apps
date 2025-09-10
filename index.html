@@ -4,33 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookshelf Apps</title>
+    <meta
+      name="description"
+      content="Bookshelf Apps adalah aplikasi web untuk mengelola koleksi buku Anda dengan mudah dan efisien."
+    />
+    <meta
+      name="keywords"
+      content="Bookshelf, Aplikasi Buku, Manajemen Buku, Koleksi Buku, Buku Digital"
+    />
+    <meta name="author" content="Irfan Dwi Samudra" />
 
     <link rel="shortcut icon" href="assets/img/logo.png" type="image/png" />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
     <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     <header>
       <div class="header-inner">
         <div class="container">
-          <div class="slider">
-            <img class="slide" src="assets/img/slide1.jpg" alt="Slide 1" />
-            <img class="slide" src="assets/img/slide2.jpg" alt="Slide 2" />
-            <img class="slide" src="assets/img/slide3.jpg" alt="Slide 3" />
+          <div class="slider opacity-50">
+            <img class="slide object-fit-cover" src="assets/img/slide-1.png" alt="Slide 1" />
+            <img class="slide object-fit-cover" src="assets/img/slide-2.png" alt="Slide 2" />
+            <img class="slide object-fit-cover" src="assets/img/slide-3.png" alt="Slide 3" />
           </div>
 
           <div class="jumbotron">
             <a href="index.html">
-              <img src="assets/img/logo.png" alt="Bookshelf Apps" />
+              <img src="assets/img/logo.png" alt="Bookshelf Apps Logo" />
             </a>
             <h1>Bookshelf Apps</h1>
             <h2>
@@ -42,54 +51,63 @@
       </div>
     </header>
 
-    <div class="container">
+    <div class="container mb-auto">
       <main class="card-body row justify-content-center">
         <div class="p-3 col-12 col-md-5 col-lg-4">
           <section>
             <h4 class="mb-3">Tambahkan Buku Baru</h4>
-            <form id="inputBook">
+            <form id="bookForm" data-testid="bookForm">
               <div class="mb-2">
-                <label class="form-label" for="inputBookTitle">Judul</label>
+                <label class="form-label" for="bookFormTitle">Judul</label>
                 <input
                   class="form-control"
-                  id="inputBookTitle"
+                  id="bookFormTitle"
                   type="text"
                   autocomplete="off"
                   required
+                  data-testid="bookFormTitleInput"
                 />
               </div>
               <div class="mb-2">
-                <label class="form-label" for="inputBookAuthor">Penulis</label>
+                <label class="form-label" for="bookFormAuthor">Penulis</label>
                 <input
                   class="form-control"
-                  id="inputBookAuthor"
+                  id="bookFormAuthor"
                   type="text"
                   autocomplete="off"
                   required
+                  data-testid="bookFormAuthorInput"
                 />
               </div>
               <div class="mb-2">
-                <label class="form-label" for="inputBookYear">Tahun</label>
+                <label class="form-label" for="bookFormYear">Tahun</label>
                 <input
                   class="form-control"
-                  id="inputBookYear"
+                  id="bookFormYear"
                   type="number"
                   autocomplete="off"
                   required
+                  data-testid="bookFormYearInput"
                 />
               </div>
               <div class="mb-2 form-check">
                 <input
                   class="form-check-input"
-                  id="inputBookIsComplete"
+                  id="bookFormIsComplete"
                   type="checkbox"
+                  data-testid="bookFormIsCompleteCheckbox"
                 />
-                <label class="form-check-label" for="inputBookIsComplete"
+                <label class="form-check-label" for="bookFormIsComplete"
                   >Selesai dibaca</label
                 >
               </div>
               <div class="mt-3 d-grid">
-                <button class="btn btn-primary" type="submit">
+                <button
+                  class="btn btn-primary"
+                  id="bookFormSubmit"
+                  type="submit"
+                  data-testid="bookFormSubmitButton"
+                >
                   Masukkan Buku
                   <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 </button>
@@ -99,11 +117,21 @@
 
           <section class="mt-5">
             <h4 class="mb-3 card-title">Cari Buku</h4>
-            <form id="searchBook">
+            <form id="searchBook" data-testid="searchBookForm">
               <label class="form-label" for="searchBookTitle">Judul</label>
               <div class="input-group">
-                <input class="form-control" id="searchBookTitle" type="text" />
-                <button class="btn btn-primary" type="submit">
+                <input
+                  class="form-control"
+                  id="searchBookTitle"
+                  type="text"
+                  data-testid="searchBookFormTitleInput"
+                />
+                <button
+                  class="btn btn-primary"
+                  id="searchSubmit"
+                  type="submit"
+                  data-testid="searchBookFormSubmitButton"
+                >
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
               </div>
@@ -119,7 +147,10 @@
           >
             <section>
               <h4 class="border-bottom border-info">Belum selesai dibaca</h4>
-              <div id="incompleteBookshelfList"></div>
+              <div
+                id="incompleteBookList"
+                data-testid="incompleteBookList"
+              ></div>
             </section>
           </div>
 
@@ -128,7 +159,7 @@
           >
             <section>
               <h4 class="border-bottom border-info">Selesai dibaca</h4>
-              <div id="completeBookshelfList"></div>
+              <div id="completeBookList" data-testid="completeBookList"></div>
             </section>
           </div>
         </div>
@@ -270,13 +301,9 @@
     </div>
   </body>
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="assets/js/script.js"></script>
   <script src="assets/js/storage.js"></script>
   <script src="assets/js/dom.js"></script>
+  <script src="assets/js/script.js"></script>
 </html>

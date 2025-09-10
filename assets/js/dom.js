@@ -1,14 +1,13 @@
-const INCOMPLETE_BOOK = "incompleteBookshelfList";
-const COMPLETE_BOOK = "completeBookshelfList";
+const INCOMPLETE_BOOK = "incompleteBookList";
+const COMPLETE_BOOK = "completeBookList";
 
 function addBook() {
   const idBook = +new Date();
-  const inputBookTitle = document.getElementById("inputBookTitle").value;
-  const inputBookAuthor = document.getElementById("inputBookAuthor").value;
-  const inputBookYear = document.getElementById("inputBookYear").value;
-  const inputBookIsComplete = document.getElementById(
-    "inputBookIsComplete"
-  ).checked;
+  const inputBookTitle = document.getElementById("bookFormTitle").value;
+  const inputBookAuthor = document.getElementById("bookFormAuthor").value;
+  const inputBookYear = document.getElementById("bookFormYear").value;
+  const inputBookIsComplete =
+    document.getElementById("bookFormIsComplete").checked;
 
   const book = createBook(
     idBook,
@@ -53,22 +52,27 @@ function createBook(
 ) {
   const book = document.createElement("article");
   book.setAttribute("id", idBook);
+  book.setAttribute("data-bookid", idBook);
+  book.setAttribute("data-testid", "bookItem");
   book.classList.add("card", "my-3");
 
   const bookTitle = document.createElement("h5");
   bookTitle.classList.add("text-truncate");
   bookTitle.style.maxWidth = "200px";
+  bookTitle.setAttribute("data-testid", "bookItemTitle");
   bookTitle.innerText = inputBookTitle;
 
   const bookAuthor = document.createElement("span");
   bookAuthor.classList.add("text-truncate", "d-inline-block");
   bookAuthor.style.maxWidth = "200px";
-  bookAuthor.innerText = inputBookAuthor;
+  bookAuthor.setAttribute("data-testid", "bookItemAuthor");
+  bookAuthor.innerText = "Penulis: " + inputBookAuthor;
 
   const bookYear = document.createElement("span");
   bookYear.classList.add("text-truncate", "d-inline-block");
   bookYear.style.maxWidth = "200px";
-  bookYear.innerText = inputBookYear;
+  bookYear.setAttribute("data-testid", "bookItemYear");
+  bookYear.innerText = "Tahun: " + inputBookYear;
 
   const br = document.createElement("br");
 
@@ -151,6 +155,7 @@ function addAction(inputBookIsComplete, idBook) {
 function createActionDelete(idBook) {
   const actionDelete = document.createElement("button");
   actionDelete.classList.add("btn", "btn-sm", "btn-outline-danger", "me-1");
+  actionDelete.setAttribute("data-testid", "bookItemDeleteButton");
   actionDelete.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
 
   actionDelete.addEventListener("click", function () {
@@ -191,28 +196,33 @@ function createActionDelete(idBook) {
 function createActionRead(idBook) {
   const action = document.createElement("button");
   action.classList.add("btn", "btn-sm", "btn-outline-success", "ms-1");
+  action.setAttribute("data-testid", "bookItemIsCompleteButton");
   action.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
 
   action.addEventListener("click", function () {
     const cardParent = document.getElementById(idBook);
-
-    const bookTitle = cardParent.querySelector(".card-content > h5").innerText;
-    const bookAuthor = cardParent.querySelectorAll(".card-content > span")[0]
-      .innerText;
-    const bookYear = cardParent.querySelectorAll(".card-content > span")[1]
-      .innerText;
-
     cardParent.remove();
 
-    const book = createBook(idBook, bookTitle, bookAuthor, bookYear, true);
-    document.getElementById(COMPLETE_BOOK).append(book);
+    // Ambil dari data penyimpanan agar konsisten
+    const bookData = findBook(idBook);
+    if (!bookData) return;
 
     deleteBookFromJson(idBook);
+
+    const movedBook = createBook(
+      idBook,
+      bookData.title,
+      bookData.author,
+      bookData.year,
+      true
+    );
+    document.getElementById(COMPLETE_BOOK).append(movedBook);
+
     const bookObject = composeBookObject(
       idBook,
-      bookTitle,
-      bookAuthor,
-      bookYear,
+      bookData.title,
+      bookData.author,
+      bookData.year,
       true
     );
 
@@ -234,28 +244,32 @@ function createActionRead(idBook) {
 function createActionUndo(idBook) {
   const action = document.createElement("button");
   action.classList.add("btn", "btn-sm", "btn-outline-secondary", "ms-1");
+  action.setAttribute("data-testid", "bookItemIsCompleteButton");
   action.innerHTML = '<i class="fa-solid fa-rotate-left"></i>';
 
   action.addEventListener("click", function () {
     const cardParent = document.getElementById(idBook);
-
-    const bookTitle = cardParent.querySelector(".card-content > h5").innerText;
-    const bookAuthor = cardParent.querySelectorAll(".card-content > span")[0]
-      .innerText;
-    const bookYear = cardParent.querySelectorAll(".card-content > span")[1]
-      .innerText;
-
     cardParent.remove();
 
-    const book = createBook(idBook, bookTitle, bookAuthor, bookYear, false);
-    document.getElementById(INCOMPLETE_BOOK).append(book);
+    const bookData = findBook(idBook);
+    if (!bookData) return;
 
     deleteBookFromJson(idBook);
+
+    const movedBook = createBook(
+      idBook,
+      bookData.title,
+      bookData.author,
+      bookData.year,
+      false
+    );
+    document.getElementById(INCOMPLETE_BOOK).append(movedBook);
+
     const bookObject = composeBookObject(
       idBook,
-      bookTitle,
-      bookAuthor,
-      bookYear,
+      bookData.title,
+      bookData.author,
+      bookData.year,
       false
     );
 
@@ -277,6 +291,7 @@ function createActionUndo(idBook) {
 function createActionEdit(idBook) {
   const actionEdit = document.createElement("button");
   actionEdit.classList.add("btn", "btn-sm", "btn-outline-warning", "mx-1");
+  actionEdit.setAttribute("data-testid", "bookItemEditButton");
   actionEdit.innerHTML = '<i class="fa-solid fa-pencil"></i>';
 
   actionEdit.addEventListener("click", function () {
@@ -299,17 +314,16 @@ function createActionEdit(idBook) {
 
 function bookSearch(keyword) {
   const filter = keyword.toUpperCase();
-  const titles = document.getElementsByTagName("h5");
+  const titles = document.querySelectorAll('[data-testid="bookItemTitle"]');
 
-  for (let i = 0; i < titles.length; i++) {
-    const titlesText = titles[i].textContent || titles[i].innerText;
-
+  titles.forEach((titleEl) => {
+    const titlesText = titleEl.textContent || titleEl.innerText;
     if (titlesText.toUpperCase().indexOf(filter) > -1) {
-      titles[i].closest(".card").style.display = "";
+      titleEl.closest(".card").style.display = "";
     } else {
-      titles[i].closest(".card").style.display = "none";
+      titleEl.closest(".card").style.display = "none";
     }
-  }
+  });
 }
 
 function showModalEdit(idBook, bookTitle, bookAuthor, bookYear, isComplete) {
